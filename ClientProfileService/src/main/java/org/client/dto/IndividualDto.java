@@ -52,6 +52,10 @@ public class IndividualDto {
     @JsonProperty(Fields.WALLET)
     private Collection<WalletDto> wallet;
 
+    @Hidden
+    @JsonProperty(Fields.AVATAR)
+    private Collection<AvatarDto> avatar;
+
 
     public static class Fields {
         public static final String UUID = "uuid";
@@ -61,5 +65,7 @@ public class IndividualDto {
         public static final String ADDRESS = "address";
 
         public static final String WALLET = "wallet";
+
+        public static final String AVATAR = "avatar";
     }
 }

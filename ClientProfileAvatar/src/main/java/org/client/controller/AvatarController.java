@@ -32,45 +32,52 @@ public class AvatarController {
 
     Logger logger = LoggerFactory.getLogger(AvatarController.class);
     private final AvatarService avatarService;
-
-    @PostMapping
-    public ResponseEntity<?> uploadAvatar(@RequestParam("avatar") MultipartFile file) throws IOException {
+    //получаю ответ о сервиса на загрузку аватара, загрузил пять картинок, пытась их пережать в метод по формированию в AvatarDto
+    @GetMapping("/{uuid}")
+    public ResponseEntity<?> uploadAvatar(@PathVariable String uuid) throws IOException {
         logger.info("Uploading avatar");
-        String uploadAvatar = avatarService.uploadAvatar(file);
+        String uploadAvatar = avatarService.uploadAvatar((MultipartFile) new ClassPathResource("image/" + avatarService.getRandomImage() + ".jpg"));
         return ResponseEntity.status(HttpStatus.OK).body(uploadAvatar);
     }
 
-    @GetMapping("/{uuid}")
-    public ResponseEntity<?> downloadAvatar(@PathVariable String uuid) throws IOException {
-        logger.info("Downloading avatar");
-        byte [] avatar;
-        try{
-            avatar = avatarService.getAvatar(uuid);
-        } catch (NoSuchElementException e) {
-            logger.warn(String.format("Avatar with %s uuid not found", uuid));
-            var imgFile = new ClassPathResource("image/error.jpg");
-            byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
-
-            return ResponseEntity
-                    .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(bytes);
-        }
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png"))
-                .body(avatar);
-    }
-
-    @GetMapping("/info/{uuid}")
-    public ResponseEntity<?> getImageInfoByUuid(@PathVariable("uuid") String uuid) {
-        logger.info("Getting info of avatar ");
-        AvatarDto avatarDto = null;
-        try {
-            avatarDto = avatarService.getInfoByUuid(uuid);
-
-        } catch (NoSuchElementException e) {
-            logger.warn(String.format("Avatar with %s uuid not found", uuid));
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(avatarDto);
-    }
+//    @PostMapping
+//    public ResponseEntity<?> uploadAvatar(@RequestParam("avatar") MultipartFile file) throws IOException {
+//        logger.info("Uploading avatar");
+//        String uploadAvatar = avatarService.uploadAvatar(file);
+//        return ResponseEntity.status(HttpStatus.OK).body(uploadAvatar);
+//    }
+//
+//    @GetMapping("/{uuid}")
+//    public ResponseEntity<?> downloadAvatar(@PathVariable String uuid) throws IOException {
+//        logger.info("Downloading avatar");
+//        byte [] avatar;
+//        try{
+//            avatar = avatarService.getAvatar(uuid);
+//        } catch (NoSuchElementException e) {
+//            logger.warn(String.format("Avatar with %s uuid not found", uuid));
+//            var imgFile = new ClassPathResource("image/error.jpg");
+//            byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
+//
+//            return ResponseEntity
+//                    .ok()
+//                    .contentType(MediaType.IMAGE_JPEG)
+//                    .body(bytes);
+//        }
+//        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png"))
+//                .body(avatar);
+//    }
+//
+//    @GetMapping("/info/{uuid}")
+//    public ResponseEntity<?> getImageInfoByUuid(@PathVariable("uuid") String uuid) {
+//        logger.info("Getting info of avatar ");
+//        AvatarDto avatarDto = null;
+//        try {
+//            avatarDto = avatarService.getInfoByUuid(uuid);
+//
+//        } catch (NoSuchElementException e) {
+//            logger.warn(String.format("Avatar with %s uuid not found", uuid));
+//        }
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(avatarDto);
+//    }
 }

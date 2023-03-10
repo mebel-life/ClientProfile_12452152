@@ -11,4 +11,6 @@ public interface AvatarService {
 
     byte[] getAvatar (String uuid);
     AvatarDto getInfoByUuid(String uuid);
+
+    int getRandomImage();
 }

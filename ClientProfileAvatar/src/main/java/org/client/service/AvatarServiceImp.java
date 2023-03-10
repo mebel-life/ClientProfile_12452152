@@ -17,6 +17,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AvatarServiceImp implements AvatarService {
 
+
     private final AvatarRepo avatarRepo;
 
     @Transactional
@@ -33,6 +34,9 @@ public class AvatarServiceImp implements AvatarService {
         if (avatarDto != null) {
             return "avatar upload successfully" + file.getOriginalFilename();
         }
+
+        // Отправить сообщение в Лоудер на загрузку в бд
+
         return null;
     }
 
@@ -53,6 +57,10 @@ public class AvatarServiceImp implements AvatarService {
                 .fileSize(avatarDto.get().getFileSize())
                 .byteSize(AvatarUtils.decompressImage(avatarDto.get().getByteSize())).build();
 
+    }
+    // получаем название рандомное название картинки от 1 до 5
+    public int getRandomImage() {
+        return (int)(Math.random()*5);
     }
 
 
